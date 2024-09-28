@@ -1,0 +1,108 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #333;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-top: 20px;
+}
+
+/* Container for the form and table */
+div {
+  margin-bottom: 20px;
+}
+
+/* Form Inputs */
+input[type="text"] {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+}
+
+button.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  background-color: #007bff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.btn:hover {
+  background-color: #0056b3;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th, table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+table th {
+  background-color: #007bff;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Button Styles in the table */
+button.edit-btn {
+  background-color: #28a745;
+}
+
+button.edit-btn:hover {
+  background-color: #218838;
+}
+
+button.delete-btn {
+  background-color: #dc3545;
+  margin-left: 5px;
+}
+
+button.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+  }
+  
+  button.btn {
+      width: 100%;
+      margin-bottom: 10px;
+  }
+
+  table {
+      font-size: 14px;
+  }
+}

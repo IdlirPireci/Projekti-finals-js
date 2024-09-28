@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        .editable {
+            background-color: #f9f9f9;
+        }
+        .btn {
+            margin: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    
+    <div>
+        <input type="text" id="taskName" placeholder="Task Name" />
+        <input type="text" id="taskStatus" placeholder="Status" />
+        <input type="text" id="taskDifficulty" placeholder="Difficulty" />
+        <button class="btn" onclick="AddTask()">Add Task</button>
+    </div>
+
+    <h2>Tasks</h2>
+    <table id="taskTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Difficulty</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be populated by JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load existing tasks from localStorage and populate the table
+            loadTasks();
+
+            // Add event listener to handle row edits
+            document.getElementById('taskTable').addEventListener('click', function(event) {
+                if (event.target.classList.contains('edit-btn')) {
+                    const row = event.target.closest('tr');
+                    const rowId = parseInt(row.dataset.id, 10);
+                    mode = "edit";
+                    EditTask(rowId);
+                } else if (event.target.classList.contains('delete-btn')) {
+                    const row = event.target.closest('tr');
+                    const rowId = parseInt(row.dataset.id, 10);
+                    DeleteTask(rowId);
+                    loadTasks();
+                }
+            });
+        });
+
+        function loadTasks() {
+            const tableBody = document.querySelector('#taskTable tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            const tableData = JSON.parse(localStorage.getItem('tableData')) || [];
+            tableData.forEach(task => {
+                const row = document.createElement('tr');
+                row.dataset.id = task.id;
+                row.innerHTML = `
+                    <td>${task.id}</td>
+                    <td>${task.name}</td>
+                    <td>${task.status}</td>
+                    <td>${task.difficulty}</td>
+                    <td>
+                        <button class="btn edit-btn">Edit</button>
+                        <button class="btn delete-btn">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function AddTask() {
+            const name = document.getElementById('taskName').value;
+            const status = document.getElementById('taskStatus').value;
+            const difficulty = document.getElementById('taskDifficulty').value;
+
+            if (name && status && difficulty) {
+                const newTask = {
+                    id: Date.now(), // Unique ID based on timestamp
+                    name: name,
+                    status: status,
+                    difficulty: difficulty
+                };
+
+                let tableData = JSON.parse(localStorage.getItem('tableData')) || [];
+                tableData.push(newTask);
+                localStorage.setItem('tableData', JSON.stringify(tableData));
+                loadTasks(); // Refresh the table
+                document.getElementById('taskName').value = '';
+                document.getElementById('taskStatus').value = '';
+                document.getElementById('taskDifficulty').value = '';
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+
+        function EditTask(rowId) {
+            // For demonstration, we'll use prompt to simulate editing.
+            const newName = prompt("Enter new task name:");
+            const newStatus = prompt("Enter new status:");
+            const newDifficulty = prompt("Enter new difficulty:");
+
+            if (newName && newStatus && newDifficulty) {
+                const rowData = {
+                    id: rowId,
+                    name: newName,
+                    status: newStatus,
+                    difficulty: newDifficulty
+                };
+
+                SaveChanges(rowData);
+                loadTasks(); // Refresh the table
+            }
+        }
+
+        function DeleteTask(rowId) {
+            let tableData = JSON.parse(localStorage.getItem('tableData')) || [];
+            tableData = tableData.filter(task => task.id !== rowId);
+            localStorage.setItem('tableData', JSON.stringify(tableData));
+        }
+
+        function SaveChanges(rowData) {
+            let tableData = JSON.parse(localStorage.getItem('tableData')) || [];
+            const index = tableData.findIndex(task => task.id === rowData.id);
+
+            if (index !== -1) {
+                tableData[index] = rowData;
+                localStorage.setItem('tableData', JSON.stringify(tableData));
+            }
+        }
+    </script>
+</body>
+</html>
